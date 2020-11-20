@@ -10,8 +10,7 @@ import About from './AboutComponent';
 import DishDetail from './DishDetailComponent';
 import Footer from './FooterComponent';
 
-
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		dishes: state.dishes,
 		comments: state.comments,
