@@ -9,7 +9,7 @@ import Header from './HeaderComponent';
 import About from './AboutComponent';
 import DishDetail from './DishDetailComponent';
 import Footer from './FooterComponent';
-import { addComment } from '../redux/ActionCreators';
+import { addComment, fetchDishes } from '../redux/ActionCreators';
 
 const mapStateToProps = state => {
 	return {
@@ -21,7 +21,8 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-	addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment))
+	addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment)),
+	fetchDishes: () => { dispatch(fetchDishes()) }
 });
 
 class Main extends Component {
@@ -30,20 +31,31 @@ class Main extends Component {
 		super(props);
 	}
 
+	componentDidMount() {
+		this.props.fetchDishes();
+	}
+
 	render() {
 
 		const HomePage = () => {
 			return (
-				<Home dish={this.props.dishes.filter((dish) => dish.featured)[0]}
+				<Home
+					dish={this.props.dishes.dishes.filter((dish) => dish.featured)[0]}
+					dishesLoading={this.props.dishes.isLoading}
+					dishesErrorMessage={this.props.dishes.ErrorMessage}
 					promo={this.props.promotions.filter((promo) => promo.featured)[0]}
-					leader={this.props.leaders.filter((leader) => leader.featured)[0]} />
+					leader={this.props.leaders.filter((leader) => leader.featured)[0]}
+				/>
 			);
 		}
 
 		const DishWithId = ({ match }) => {
 			const dishID = parseInt(match.params.dishId, 10)
 			return (
-				<DishDetail dish={this.props.dishes.filter((dish) => dish.id === dishID)[0]}
+				<DishDetail
+					dish={this.props.dishes.dishes.filter((dish) => dish.id === dishID)[0]}
+					isLoading={this.props.dishes.isLoading}
+					errorMessage={this.props.dishes.ErrorMessage}
 					comments={this.props.comments.filter((comment) => comment.dishId === dishID)}
 					addComment={this.props.addComment}
 				/>
