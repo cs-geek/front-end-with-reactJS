@@ -199,7 +199,7 @@ const DishDetail = (props) => {
 			</div>
 		)
 	}
-	else if (props.dishes != null) {
+	else {
 		return (
 			<div className="container">
 				<div className="row">
